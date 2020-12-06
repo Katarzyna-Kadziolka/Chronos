@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chronos", "Chronos.csproj", "{F040260C-3545-4405-A4B0-6DC4AA27BAEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChronosTests", "..\ChronosTests\ChronosTests.csproj", "{76518C7E-21BC-4BE3-B9E5-ABD15AD8283A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F040260C-3545-4405-A4B0-6DC4AA27BAEE} = {F040260C-3545-4405-A4B0-6DC4AA27BAEE}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F040260C-3545-4405-A4B0-6DC4AA27BAEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F040260C-3545-4405-A4B0-6DC4AA27BAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F040260C-3545-4405-A4B0-6DC4AA27BAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F040260C-3545-4405-A4B0-6DC4AA27BAEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76518C7E-21BC-4BE3-B9E5-ABD15AD8283A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76518C7E-21BC-4BE3-B9E5-ABD15AD8283A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76518C7E-21BC-4BE3-B9E5-ABD15AD8283A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76518C7E-21BC-4BE3-B9E5-ABD15AD8283A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A52077C9-0DC3-46B0-89DD-EE73F54E1DD7}
+	EndGlobalSection
+EndGlobal
