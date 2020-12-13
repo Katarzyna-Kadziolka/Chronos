@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Chronos.Data;
 using Chronos.Models.ToDoTasks;
@@ -19,6 +22,16 @@ namespace Chronos.Controllers {
             var t = _mapper.Map<ToDoTask>(task);
             ToDoTaskDb.Tasks.Add(t);
             return Ok(t);
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<ToDoTask>> GetToDoTask(DateTime? dateFrom = null, DateTime? dateTo = null) {
+            dateFrom ??= DateTime.Today;
+            dateTo ??= DateTime.Today;
+            var tasks = ToDoTaskDb.Tasks
+                .Where(a => a.Date.Date <= dateTo && a.Date.Date >= dateFrom);
+
+            return Ok(tasks);
         }
 
         //[HttpDelete("{id}")]
