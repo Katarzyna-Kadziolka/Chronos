@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Chronos.Data;
@@ -28,19 +29,22 @@ namespace Chronos.Controllers {
         public ActionResult<IEnumerable<ToDoTask>> GetToDoTask(DateTime? dateFrom = null, DateTime? dateTo = null) {
             dateFrom ??= DateTime.Today;
             dateTo ??= DateTime.Today;
+            if (dateTo < dateFrom) {
+                return BadRequest($"DateTo {dateTo} cannot be before dateFrom {dateFrom}.");
+            }
             var tasks = ToDoTaskDb.Tasks
                 .Where(a => a.Date.Date <= dateTo && a.Date.Date >= dateFrom);
 
             return Ok(tasks);
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteTask(Guid id) {
-        //    var taskToRemove = ToDoTaskDb.Tasks.Find(o => o.Id == id);
-        //    if (taskToRemove == null) return NotFound();
-        //    ToDoTaskDb.Tasks.Remove(taskToRemove);
-        //    return Ok(taskToRemove);
-        //}
+        [HttpDelete("{id}")]
+        public IActionResult DeleteTask(Guid id) {
+            var taskToRemove = ToDoTaskDb.Tasks.Find(o => o.Id == id);
+            if (taskToRemove == null) return NotFound();
+            ToDoTaskDb.Tasks.Remove(taskToRemove);
+            return Ok(taskToRemove);
+        }
 
         //[HttpPatch("{id}")]
         //public async Task<IActionResult> PatchTask(Guid id, ToDoTask task) {

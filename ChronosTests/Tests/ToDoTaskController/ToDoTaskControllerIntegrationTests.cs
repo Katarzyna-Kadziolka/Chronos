@@ -40,6 +40,9 @@ namespace ChronosTests.Tests.ToDoTaskController {
             toDoTask.Id.Should().NotBeEmpty();
             toDoTask.ToDoTaskText.Should().Be(toDoTaskPost.ToDoTaskText);
             toDoTask.Date.Should().Be(toDoTaskPost.Date);
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         [Test]
         public async Task GetToDoTasks_DateFromNullDateToNull_ShouldReturnToDoTasksList() {
@@ -56,6 +59,9 @@ namespace ChronosTests.Tests.ToDoTaskController {
             // Assert
             tasks.Should().NotBeEmpty();
             tasks.Should().ContainEquivalentOf(toDoTask);
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         }
         [Test]
         public async Task GetToDoTasks_DateFromTodayDateToNull_ShouldReturnToDoTasksList() {
@@ -65,16 +71,106 @@ namespace ChronosTests.Tests.ToDoTaskController {
             var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
             postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
             var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
-            // Act
             var query = new Dictionary<string, string> {
                 ["dateFrom"] = DateTime.Today.ToString("s")
             };
+            // Act
             var getResponse = await _client.GetAsync("api/toDoTask/", query);
             getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
             var tasks = await getResponse.Content.ReadFromJsonAsync<List<ToDoTask>>();
             // Assert
             tasks.Should().NotBeEmpty();
             tasks.Should().ContainEquivalentOf(toDoTask);
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        [Test]
+        public async Task GetToDoTasks_DateFromNullDateToToday_ShouldReturnToDoTasksList() {
+            // Arrange
+            var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
+            toDoTaskPost.Date = DateTime.Today;
+            var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            var query = new Dictionary<string, string> {
+                ["dateTo"] = DateTime.Today.ToString("s")
+            };
+            // Act
+            var getResponse = await _client.GetAsync("api/toDoTask/", query);
+            getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var tasks = await getResponse.Content.ReadFromJsonAsync<List<ToDoTask>>();
+            // Assert
+            tasks.Should().NotBeEmpty();
+            tasks.Should().ContainEquivalentOf(toDoTask);
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        [Test]
+        public async Task GetToDoTasks_DateFromTodayDateToTomorrow_ShouldReturnToDoTasksList() {
+            // Arrange
+            var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
+            toDoTaskPost.Date = DateTime.Today.Tomorrow();
+            var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            var query = new Dictionary<string, string> {
+                ["dateFrom"] = DateTime.Today.ToString("s"),
+                ["dateTo"] = DateTime.Today.Tomorrow().ToString("s")
+            }; 
+            // Act
+            var getResponse = await _client.GetAsync("api/toDoTask/", query);
+            getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var tasks = await getResponse.Content.ReadFromJsonAsync<List<ToDoTask>>();
+            // Assert
+            tasks.Should().NotBeEmpty();
+            tasks.Should().ContainEquivalentOf(toDoTask);
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        [Test]
+        public async Task GetToDoTasks_DateFromTomorrowDateToNull_ShouldReturnBadRequest() {
+            // Arrange
+            var query = new Dictionary<string, string> {
+                ["dateFrom"] = DateTime.Today.Tomorrow().ToString("s"),
+            };
+            var expectedError = $"DateTo {DateTime.Today} cannot be before dateFrom {DateTime.Today.Tomorrow()}.";
+            // Act
+            var getResponse = await _client.GetAsync("api/toDoTask/", query);
+            // Assert
+            getResponse.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            var error = await getResponse.Content.ReadAsStringAsync();
+            error.Should().Be(expectedError);
+        }
+        [Test]
+        public async Task GetToDoTasks_DateFromTodayDateToTomorrowTaskNotInRange_ShouldReturnEmptyToDoTasksList() {
+            // Arrange
+            var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
+            toDoTaskPost.Date = DateTime.Today.AddDays(2);
+            var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            var query = new Dictionary<string, string> {
+                ["dateFrom"] = DateTime.Today.ToString("s"),
+                ["dateTo"] = DateTime.Today.Tomorrow().ToString("s")
+            }; 
+            // Act
+            var getResponse = await _client.GetAsync("api/toDoTask/", query);
+            getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var tasks = await getResponse.Content.ReadFromJsonAsync<List<ToDoTask>>();
+            // Assert
+            tasks.Should().BeEmpty();
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Test]
+        public async Task DeleteTask_CorrectId_ShouldReturnOk() {
+            // Arrange
+            
         }
     }
 }
