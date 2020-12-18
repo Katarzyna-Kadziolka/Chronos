@@ -9,5 +9,12 @@ namespace ChronosTests.Helpers.Data {
                 Date = DateTime.Now.AddDays(1)
             };
         }
+
+        public ToDoTaskPatch CreateDoTaskPatch() {
+            return new ToDoTaskPatch {
+                ToDoTaskText = "Test"+Guid.NewGuid(),
+                Date = DateTime.Now.AddDays(1)
+            };
+        }
     }
 }

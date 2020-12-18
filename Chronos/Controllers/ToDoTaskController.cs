@@ -38,6 +38,13 @@ namespace Chronos.Controllers {
             return Ok(tasks);
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<ToDoTask> GetToDoTaskById(Guid id) {
+            var task = ToDoTaskDb.Tasks.Find(o => o.Id == id);
+            if (task == null) return NotFound();
+            return Ok(task);
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(Guid id) {
             var taskToRemove = ToDoTaskDb.Tasks.Find(o => o.Id == id);
@@ -46,13 +53,12 @@ namespace Chronos.Controllers {
             return Ok(taskToRemove);
         }
 
-        //[HttpPatch("{id}")]
-        //public async Task<IActionResult> PatchTask(Guid id, ToDoTask task) {
-        //    var taskFromDb = ToDoTaskDb.Tasks.Find(o => o.Id == id);
-        //    if (taskFromDb == null) return NotFound();
-        //    var toDoTask = _mapper.Map(task, taskFromDb);
-        //    return Ok(toDoTask);
-
-        //}
+        [HttpPatch("{id}")]
+        public IActionResult PatchTask(Guid id, ToDoTask task) {
+            var taskFromDb = ToDoTaskDb.Tasks.Find(o => o.Id == id);
+            if (taskFromDb == null) return NotFound();
+            var toDoTask = _mapper.Map(task, taskFromDb);
+            return Ok(toDoTask);
+        }
     }
 }

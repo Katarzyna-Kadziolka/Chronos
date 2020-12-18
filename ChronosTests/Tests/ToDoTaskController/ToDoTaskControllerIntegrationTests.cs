@@ -10,6 +10,7 @@ using Chronos.Models.ToDoTasks.Validators;
 using ChronosTests.Helpers;
 using ChronosTests.Helpers.Data;
 using FluentAssertions;
+using FluentAssertions.Common;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
 
@@ -170,7 +171,82 @@ namespace ChronosTests.Tests.ToDoTaskController {
         [Test]
         public async Task DeleteTask_CorrectId_ShouldReturnOk() {
             // Arrange
-            
+            var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
+            toDoTaskPost.Date = DateTime.Today;
+            var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            // Act
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            // Assert
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        [Test]
+        public async Task DeleteTask_BadId_ShouldReturnNotFound() {
+            // Arrange 
+            var id = new Guid();
+            // Act
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{id}");
+            // Assert
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Test]
+        public async Task DeleteTask_CorrectIdRemoveSecondTime_ShouldReturnNotFound() {
+            // Arrange
+            var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
+            toDoTaskPost.Date = DateTime.Today;
+            var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            // Act
+            var secondDeleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            // Assert
+            secondDeleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task GetToDoTaskById_CorrectId_ShouldReturnToDoTask() {
+            // Arrange
+            var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
+            toDoTaskPost.Date = DateTime.Today;
+            var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            // Act
+            var getResponse = await _client.GetAsync($"api/toDoTask/{toDoTask.Id}");
+            getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var task = await getResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            // Assert
+            task.Should().IsSameOrEqualTo(toDoTask);
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        [Test]
+        public async Task GetTaskById_BadId_ShouldReturnNotFound() {
+            // Arrange 
+            var id = new Guid();
+            // Act
+            var getResponse = await _client.GetAsync($"api/toDoTask/{id}");
+            // Assert
+            getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task PatchTask_CorrectToDoTask_ShouldReturnUpdatedToDoTask() {
+            // Arrange
+            var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
+            toDoTaskPost.Date = DateTime.Today;
+            var postResponse = await _client.PostAsJsonAsync("api/toDoTask", toDoTaskPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            // Act
+            var toDoTaskPatch = TestData.ToDoTask.CreateDoTaskPatch();
+            var patchResponse = await _client.PatchAsJsonAsync($"api/toDoTask/{toDoTask.Id}", toDoTaskPatch);
+            patchResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            // TODO 
         }
     }
 }
