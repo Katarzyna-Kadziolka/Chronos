@@ -4,14 +4,11 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Web;
 using Chronos.Models.ToDoTasks;
-using Chronos.Models.ToDoTasks.Validators;
 using ChronosTests.Helpers;
 using ChronosTests.Helpers.Data;
 using FluentAssertions;
 using FluentAssertions.Common;
-using FluentValidation.TestHelper;
 using NUnit.Framework;
 
 namespace ChronosTests.Tests.ToDoTaskController {
@@ -243,10 +240,17 @@ namespace ChronosTests.Tests.ToDoTaskController {
             postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
             var toDoTask = await postResponse.Content.ReadFromJsonAsync<ToDoTask>();
             // Act
-            var toDoTaskPatch = TestData.ToDoTask.CreateDoTaskPatch();
+            var toDoTaskPatch = TestData.ToDoTask.CreateToDoTaskPatch();
             var patchResponse = await _client.PatchAsJsonAsync($"api/toDoTask/{toDoTask.Id}", toDoTaskPatch);
             patchResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-            // TODO 
+            var responseContent = await patchResponse.Content.ReadFromJsonAsync<ToDoTask>();
+            // Assert
+            responseContent.ToDoTaskText.Should().Be(toDoTaskPatch.ToDoTaskText);
+            responseContent.Date.Should().Be(toDoTaskPatch.Date);
+            responseContent.Category.Should().Be(toDoTaskPatch.Category);
+
+            var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         }
     }
 }
