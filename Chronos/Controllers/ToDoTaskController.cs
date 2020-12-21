@@ -20,7 +20,7 @@ namespace Chronos.Controllers {
         [HttpPost]
         public ActionResult<ToDoTask> PostToDoTask(ToDoTaskPost task) {
             var t = _mapper.Map<ToDoTask>(task);
-            ToDoTaskDb.Tasks.Add(t);
+            ChronosDb.Tasks.Add(t);
             return Ok(t);
         }
 
@@ -31,7 +31,7 @@ namespace Chronos.Controllers {
             if (dateTo < dateFrom) {
                 return BadRequest($"DateTo {dateTo} cannot be before dateFrom {dateFrom}.");
             }
-            var tasks = ToDoTaskDb.Tasks
+            var tasks = ChronosDb.Tasks
                 .Where(a => a.Date.Date <= dateTo && a.Date.Date >= dateFrom);
 
             return Ok(tasks);
@@ -39,22 +39,22 @@ namespace Chronos.Controllers {
 
         [HttpGet("{id}")]
         public ActionResult<ToDoTask> GetToDoTaskById(Guid id) {
-            var task = ToDoTaskDb.Tasks.Find(o => o.Id == id);
+            var task = ChronosDb.Tasks.Find(o => o.Id == id);
             if (task == null) return NotFound();
             return Ok(task);
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(Guid id) {
-            var taskToRemove = ToDoTaskDb.Tasks.Find(o => o.Id == id);
+            var taskToRemove = ChronosDb.Tasks.Find(o => o.Id == id);
             if (taskToRemove == null) return NotFound();
-            ToDoTaskDb.Tasks.Remove(taskToRemove);
+            ChronosDb.Tasks.Remove(taskToRemove);
             return Ok(taskToRemove);
         }
 
         [HttpPatch("{id}")]
         public IActionResult PatchTask(Guid id, ToDoTask task) {
-            var taskFromDb = ToDoTaskDb.Tasks.Find(o => o.Id == id);
+            var taskFromDb = ChronosDb.Tasks.Find(o => o.Id == id);
             if (taskFromDb == null) return NotFound();
             var toDoTask = _mapper.Map(task, taskFromDb);
             return Ok(toDoTask);

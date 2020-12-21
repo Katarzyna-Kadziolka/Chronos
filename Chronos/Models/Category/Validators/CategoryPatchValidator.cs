@@ -6,7 +6,7 @@ namespace Chronos.Models.Category.Validators
     public class CategoryPatchValidator: AbstractValidator<CategoryPatch>
     {
         public CategoryPatchValidator() {
-            RuleFor(a => a.CategoryText).NotEmpty();
+            RuleFor(a => a.Name).NotEmpty();
         }
     }
 }

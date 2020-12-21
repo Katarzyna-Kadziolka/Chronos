@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace Chronos.Models.Category
-{
+namespace Chronos.Models.Category {
     public class Category {
         public Guid Id { get; set; }
         public string Name { get; set; }
