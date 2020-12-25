@@ -39,22 +39,20 @@ namespace Chronos.Controllers {
             return Ok(categories);
         }
 
-        //    [HttpGet("{id}")]
-        //    public ActionResult<ToDoTask> GetToDoTaskById(Guid id) {
-        //        var task = ToDoTaskDb.Tasks.Find(o => o.Id == id);
-        //        if (task == null) return NotFound();
-        //        return Ok(task);
-        //    }
+        [HttpGet("{id}")]
+        public ActionResult<Category> GetCategoryById(Guid id) {
+            var category = ChronosDb.Categories.Find(o => o.Id == id);
+            if (category == null) return NotFound();
+            return Ok(category);
+        }
 
-        
 
-        //    [HttpPatch("{id}")]
-        //    public IActionResult PatchTask(Guid id, ToDoTask task) {
-        //        var taskFromDb = ToDoTaskDb.Tasks.Find(o => o.Id == id);
-        //        if (taskFromDb == null) return NotFound();
-        //        var toDoTask = _mapper.Map(task, taskFromDb);
-        //        return Ok(toDoTask);
-        //    }
-        //}
+        [HttpPatch("{id}")]
+        public IActionResult PatchCategory(Guid id, Category category) {
+            var categoryFromDb = ChronosDb.Categories.Find(o => o.Id == id);
+            if (categoryFromDb == null) return NotFound();
+            var newCategory = _mapper.Map(category, categoryFromDb);
+            return Ok(newCategory);
+        }
     }
 }

@@ -94,5 +94,50 @@ namespace ChronosTests.Tests.CategoryController {
             var deleteResponse = await _client.DeleteAsync($"api/categories/{category.Id}");
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         }
+        [Test]
+        public async Task GetCategoriesById_CorrectId_ShouldReturnCategory() {
+            // Arrange
+            var categoryPost = TestData.Category.CreateCategoryPost();
+            var postResponse = await _client.PostAsJsonAsync("api/categories", categoryPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var category = await postResponse.Content.ReadFromJsonAsync<Category>();
+            // Act
+            var getResponse = await _client.GetAsync($"api/categories/{category.Id}");
+            getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var categoryResponse = await getResponse.Content.ReadFromJsonAsync<Category>();
+            // Assert
+            categoryResponse.Id.Should().Be(category.Id);
+            categoryResponse.Name.Should().Be(category.Name);
+
+            var deleteResponse = await _client.DeleteAsync($"api/categories/{category.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        [Test]
+        public async Task GetCategoriesById_BadId_ShouldReturnNotFound() {
+            // Arrange
+            var id = Guid.NewGuid();
+            // Act
+            var getResponse = await _client.GetAsync($"api/categories/{id}");
+            // Assert
+            getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+        [Test]
+        public async Task PatchCategory_CorrectCategory_ShouldReturnUpdatedCategory() {
+            // Arrange
+            var categoryPost = TestData.Category.CreateCategoryPost();
+            var postResponse = await _client.PostAsJsonAsync("api/categories", categoryPost);
+            postResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var category = await postResponse.Content.ReadFromJsonAsync<Category>();
+            // Act
+            var categoryPatch = TestData.Category.CreateCategoryPatch();
+            var patchResponse = await _client.PatchAsJsonAsync($"api/categories/{category.Id}", categoryPatch);
+            patchResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var responseContent = await patchResponse.Content.ReadFromJsonAsync<Category>();
+            // Assert
+            responseContent.Name.Should().Be(categoryPatch.Name);
+
+            var deleteResponse = await _client.DeleteAsync($"api/categories/{category.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
     }
 }
