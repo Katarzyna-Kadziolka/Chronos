@@ -27,12 +27,12 @@ namespace ChronosTests.Tests.ToDoTaskController {
             // Arrange
             var validator = new ToDoTaskPostValidator();
             var toDoTaskPost = TestData.ToDoTask.CreateToDoTaskPost();
-            toDoTaskPost.ToDoTaskText = string.Empty;
+            toDoTaskPost.Name = string.Empty;
             // Act
             var result = validator.TestValidate(toDoTaskPost);
             // Assert
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(a => a.ToDoTaskText);
+            result.ShouldHaveValidationErrorFor(a => a.Name);
         }
 
         [Test]
