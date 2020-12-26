@@ -12,7 +12,7 @@ namespace ChronosTests.Helpers.Data {
 
         public ToDoTaskPatch CreateToDoTaskPatch() {
             return new ToDoTaskPatch {
-                ToDoTaskText = "Test"+Guid.NewGuid(),
+                Name = "Test"+Guid.NewGuid(),
                 Date = DateTime.Now.AddDays(1)
             };
         }

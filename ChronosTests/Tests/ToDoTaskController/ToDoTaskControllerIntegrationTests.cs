@@ -36,7 +36,7 @@ namespace ChronosTests.Tests.ToDoTaskController {
             var toDoTask = await response.Content.ReadFromJsonAsync<ToDoTask>();
             // Assert
             toDoTask.Id.Should().NotBeEmpty();
-            toDoTask.ToDoTaskText.Should().Be(toDoTaskPost.Name);
+            toDoTask.Name.Should().Be(toDoTaskPost.Name);
             toDoTask.Date.Should().Be(toDoTaskPost.Date);
 
             var deleteResponse = await _client.DeleteAsync($"api/toDoTask/{toDoTask.Id}");
@@ -245,7 +245,7 @@ namespace ChronosTests.Tests.ToDoTaskController {
             patchResponse.StatusCode.Should().Be(HttpStatusCode.OK);
             var responseContent = await patchResponse.Content.ReadFromJsonAsync<ToDoTask>();
             // Assert
-            responseContent.ToDoTaskText.Should().Be(toDoTaskPatch.ToDoTaskText);
+            responseContent.Name.Should().Be(toDoTaskPatch.Name);
             responseContent.Date.Should().Be(toDoTaskPatch.Date);
             responseContent.Category.Should().Be(toDoTaskPatch.Category);
 

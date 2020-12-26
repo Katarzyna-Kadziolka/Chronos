@@ -29,12 +29,12 @@ namespace ChronosTests.Tests.ToDoTaskController
             // Arrange
             var validator = new ToDoTaskPatchValidator();
             var toDoTaskPatch = TestData.ToDoTask.CreateToDoTaskPatch();
-            toDoTaskPatch.ToDoTaskText = string.Empty;
+            toDoTaskPatch.Name = string.Empty;
             // Act
             var result = validator.TestValidate(toDoTaskPatch);
             // Assert
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(a => a.ToDoTaskText);
+            result.ShouldHaveValidationErrorFor(a => a.Name);
         }
         [Test]
         public void ToDoTaskPatchValidation_DateFromThePast_ShouldReturnError() {

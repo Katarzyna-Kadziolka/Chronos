@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Chronos.Data;
 using Chronos.Models.Category;
 using Chronos.Models.Category.Requests;
-using Chronos.Models.ToDoTasks;
 
 namespace Chronos.Controllers {
     [Route("api/[controller]")]

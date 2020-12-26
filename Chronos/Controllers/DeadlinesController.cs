@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Chronos.Data;
 using Chronos.Models.Deadlines;
-using Chronos.Models.ToDoTasks;
-using Chronos.Models.ToDoTasks.Requests;
+using Chronos.Models.Deadlines.Requests;
 
 namespace Chronos.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class DeadlineController : ControllerBase {
+    public class DeadlinesController : ControllerBase {
         private readonly IMapper _mapper;
 
-        public DeadlineController(IMapper mapper) {
+        public DeadlinesController(IMapper mapper) {
             _mapper = mapper;
         }
 
         [HttpPost]
-        public ActionResult<Deadline> PostDeadline(Deadline deadline) {
+        public ActionResult<Deadline> PostDeadline(DeadlinePost deadline) {
             var t = _mapper.Map<Deadline>(deadline);
             ChronosDb.Deadlines.Add(t);
             return Ok(t);

@@ -5,8 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Chronos.Models.Category;
-using Chronos.Models.Category.Requests;
-using Chronos.Models.ToDoTasks;
 using ChronosTests.Helpers;
 using ChronosTests.Helpers.Data;
 using FluentAssertions;

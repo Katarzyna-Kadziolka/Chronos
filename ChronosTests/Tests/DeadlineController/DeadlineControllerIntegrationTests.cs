@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using Chronos.Models.Deadlines;
-using Chronos.Models.ToDoTasks;
 using ChronosTests.Helpers;
 using ChronosTests.Helpers.Data;
 using FluentAssertions;
@@ -35,7 +30,7 @@ namespace ChronosTests.Tests.DeadlineController
             // Arrange
             var deadlinePost = TestData.Deadline.CreateDeadlinePost();
             // Act
-            var response = await _client.PostAsJsonAsync("api/deadline", deadlinePost);
+            var response = await _client.PostAsJsonAsync("api/deadlines", deadlinePost);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var deadline = await response.Content.ReadFromJsonAsync<Deadline>();
             // Assert
