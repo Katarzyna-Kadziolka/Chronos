@@ -1,7 +1,5 @@
 using System;
-using System.Net.Http;
 using Chronos.Models.ToDoTasks.Validators;
-using ChronosTests.Helpers;
 using ChronosTests.Helpers.Data;
 using FluentAssertions;
 using FluentValidation.TestHelper;
@@ -9,18 +7,6 @@ using NUnit.Framework;
 
 namespace ChronosTests.Tests.ToDoTaskController {
     public class ToDoTaskPostValidatorTests {
-        private HttpClient _client;
-
-        [OneTimeSetUp]
-        public void Setup() {
-            var factory = new ChronosWebApplicationFactory();
-            _client = factory.CreateClient();
-        }
-
-        [OneTimeTearDown]
-        public void CleanUp() {
-            _client.Dispose();
-        }
 
         [Test]
         public void ToDoPostValidation_EmptyText_ShouldReturnError() {

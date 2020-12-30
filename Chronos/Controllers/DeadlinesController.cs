@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Chronos.Data;
 using Chronos.Models.Deadlines;
@@ -21,42 +24,40 @@ namespace Chronos.Controllers {
             return Ok(t);
         }
 
-        //[HttpDelete("{id}")]
-        //public IActionResult DeleteTask(Guid id) {
-        //    var taskToRemove = ChronosDb.Tasks.Find(o => o.Id == id);
-        //    if (taskToRemove == null) return NotFound();
-        //    ChronosDb.Tasks.Remove(taskToRemove);
-        //    return Ok(taskToRemove);
-        //}
+        [HttpDelete("{id}")]
+        public IActionResult DeleteDeadline(Guid id) {
+            var deadlineToRemove = ChronosDb.Deadlines.Find(o => o.Id == id);
+            if (deadlineToRemove == null) return NotFound();
+            ChronosDb.Deadlines.Remove(deadlineToRemove);
+            return Ok(deadlineToRemove);
+        }
 
-        //[HttpGet]
-        //public ActionResult<IEnumerable<ToDoTask>> GetToDoTask(DateTime? dateFrom = null, DateTime? dateTo = null) {
-        //    dateFrom ??= DateTime.Today;
-        //    dateTo ??= DateTime.Today;
-        //    if (dateTo < dateFrom) {
-        //        return BadRequest($"DateTo {dateTo} cannot be before dateFrom {dateFrom}.");
-        //    }
-        //    var tasks = ChronosDb.Tasks
-        //        .Where(a => a.Date.Date <= dateTo && a.Date.Date >= dateFrom);
+        [HttpGet]
+        public ActionResult<IEnumerable<Deadline>> GetDeadlines(DateTime? dateFrom = null, DateTime? dateTo = null) {
+            dateFrom ??= DateTime.Today;
+            dateTo ??= DateTime.Today;
+            if (dateTo < dateFrom) {
+                return BadRequest($"DateTo {dateTo} cannot be before dateFrom {dateFrom}.");
+            }
+            var deadlines = ChronosDb.Deadlines
+                .Where(a => a.Date.Date <= dateTo && a.Date.Date >= dateFrom);
 
-        //    return Ok(tasks);
-        //}
+            return Ok(deadlines);
+        }
 
-        //[HttpGet("{id}")]
-        //public ActionResult<ToDoTask> GetToDoTaskById(Guid id) {
-        //    var task = ChronosDb.Tasks.Find(o => o.Id == id);
-        //    if (task == null) return NotFound();
-        //    return Ok(task);
-        //}
+        [HttpGet("{id}")]
+        public ActionResult<Deadline> GetDeadlineById(Guid id) {
+            var deadline = ChronosDb.Deadlines.Find(o => o.Id == id);
+            if (deadline == null) return NotFound();
+            return Ok(deadline);
+        }
 
-
-
-        //[HttpPatch("{id}")]
-        //public IActionResult PatchTask(Guid id, ToDoTask task) {
-        //    var taskFromDb = ChronosDb.Tasks.Find(o => o.Id == id);
-        //    if (taskFromDb == null) return NotFound();
-        //    var toDoTask = _mapper.Map(task, taskFromDb);
-        //    return Ok(toDoTask);
-        //}
+        [HttpPatch("{id}")]
+        public IActionResult PatchDeadline(Guid id, Deadline deadline) {
+            var deadlineFromDb = ChronosDb.Deadlines.Find(o => o.Id == id);
+            if (deadlineFromDb == null) return NotFound();
+            var updatedDeadline = _mapper.Map(deadline, deadlineFromDb);
+            return Ok(updatedDeadline);
+        }
     }
 }

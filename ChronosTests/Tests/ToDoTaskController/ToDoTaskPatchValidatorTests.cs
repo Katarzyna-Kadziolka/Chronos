@@ -1,28 +1,12 @@
 ﻿using System;
-using System.Net.Http;
 using Chronos.Models.ToDoTasks.Validators;
-using ChronosTests.Helpers;
 using ChronosTests.Helpers.Data;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using NUnit.Framework;
 
-namespace ChronosTests.Tests.ToDoTaskController
-{
-    public class ToDoTaskPatchValidatorTests
-    {
-        private HttpClient _client;
-
-        [OneTimeSetUp]
-        public void Setup() {
-            var factory = new ChronosWebApplicationFactory();
-            _client = factory.CreateClient();
-        }
-
-        [OneTimeTearDown]
-        public void CleanUp() {
-            _client.Dispose();
-        }
+namespace ChronosTests.Tests.ToDoTaskController {
+    public class ToDoTaskPatchValidatorTests {
 
         [Test]
         public void ToDoTaskPatchValidator_EmptyText_ShouldReturnError() {
@@ -36,6 +20,7 @@ namespace ChronosTests.Tests.ToDoTaskController
             result.IsValid.Should().BeFalse();
             result.ShouldHaveValidationErrorFor(a => a.Name);
         }
+
         [Test]
         public void ToDoTaskPatchValidation_DateFromThePast_ShouldReturnError() {
             // Arrange
